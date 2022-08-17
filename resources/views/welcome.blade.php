@@ -8,6 +8,9 @@
 </head>
 <body class="bg-dark text-white">
     <div class="container">
+        {{-- <script async
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAtIwSn1wwMtJuRZBk8Jp8P1T1A8s_AKV4&libraries=places&callback=initMap">
+</script> --}}
         <div class="row">
             <div class="col-12 d-flex justify-content-center my-5 p-3 mh-100">
                 <div class="shadow p-3 mb-5 rounded w-50">
@@ -15,11 +18,11 @@
                         <div class="col-6">
                             <div class="row">
                                 <div class="col-6">
-                                    <h1 style="font-size: 60px; font-weight:900;">30°C</h1>
+                                    <h1 style="font-size: 60px; font-weight:900;">{{ round($response['main']['temp']) }}°C</h1>
                                 </div>
                                 <div class="col-6">
-                                    <p style="font-weight: 700;">Cloudy</p>
-                                    <p>Toronto, Canada</p>
+                                    <p style="font-weight: 700;">{{ $response['weather']['0']['main'] }}</p>
+                                    <p>Toronto, Canada:</p>
                                 </div>
                             </div>
                         </div>
