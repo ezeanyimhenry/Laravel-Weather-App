@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\weatherController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,3 +17,12 @@ use App\Http\Controllers\weatherController;
 */
 
 Route::get('/', [weatherController::class, 'index']);
+
+Route::get('/info', function (Request $request) {
+    $lat = $request->input('lat');
+    $lng = $request->input('lng');
+    $apiKey= config('services.openweather.key');
+    $responses = Http::get('https://api.openweathermap.org/data/2.5/weather?lat='.$lat.'&lon='.$lng.'&appid='.$apiKey.'&units=metric');
+    $response= $responses->collect()->toJson();
+    return $response;
+});

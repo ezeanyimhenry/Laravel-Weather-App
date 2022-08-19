@@ -9,10 +9,10 @@ class weatherController extends Controller
 {
     public function index() {
         $apiKey= config('services.openweather.key');
-        $responses = Http::get('https://api.openweathermap.org/data/2.5/weather?lat=32&lon=149&appid='.$apiKey.'&units=metric');
+        $dailys= Http::get('api.openweathermap.org/data/2.5/forecast?lat=6.44998&lon=7.5&appid='.$apiKey.'&units=metric&cnt=6');
+        $responses = Http::get('https://api.openweathermap.org/data/2.5/weather?lat=6.44998&lon=7.5&appid='.$apiKey.'&units=metric');
         $response= $responses->collect()->toArray();
-        // var_dump($response);
-        // die();
-        return view('welcome')->with('response', $response);
+        $daily= $dailys->collect()->toArray();
+        return view('welcome', compact('response','daily'));
     }
 }
