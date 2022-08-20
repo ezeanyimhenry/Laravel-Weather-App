@@ -18,18 +18,19 @@
     <div class="container">
         <div class="row">
             <div class="d-flex justify-content-center">
-                <div class="col-12 mt-5 p-3 mh-100 w-50" id="app">
+                <div class="search col-12 mt-5 p-3 mh-100 w-50" id="app">
                     <input type="search" id="city" class="form-control w-100" placeholder="search location">
                 </div>
             </div>
             <div class="col-12 d-flex justify-content-center mb-5 p-3 mh-100">
-                <div class="shadow p-3 mb-5 rounded w-50">
+                <div class="main shadow py-3 px-5 mb-5 rounded w-50">
                     <div class="row">
                         <div class="col-9">
                             <div class="row">
                                 <div class="col-6">
                                     <h1 style="font-size: 50px; font-weight:900;" id="temp">
                                         {{ round($response['main']['temp']) }}°C</h1>
+                                        <span id="feels">Feels like: {{ round($response['main']['feels_like']) }}°C</span>
                                 </div>
                                 <div class="col-6">
                                     <p style="font-weight: 700;" id="condition">{{ $response['weather']['0']['main'] }}</p>
@@ -46,11 +47,11 @@
                     </div>
                     @foreach ( $daily['list'] as $day)
                         <div class="row text-center py-3 my-auto">
-                            <div class="col-3">{{ gmdate('D, h:i a', $day['dt']) }}</div>
-                            <div class="col-6"><span>icon</span> Mostly cloudy throughout the day</div>
+                            <div class="col-3" id="day">{{ gmdate('D, h a', $day['dt']) }}</div>
+                            <div class="col-6"><img id="icon2" src="http://openweathermap.org/img/wn/{{ $day['weather']['0']['icon'] }}.png"> <span id="desc"> {{ $day['weather']['0']['description'] }} </span></div>
                             <div class="col-3">
-                                <p class="my-0">4°C</p>
-                                <p class="my-0">4°C</p>
+                                <p class="my-0" id="temphigh">{{ round($response['main']['temp_max']) }}°C</p>
+                                <p class="my-0" id="templow">{{ round($response['main']['temp_min']) }}°C</p>
                             </div>
                         </div>
                     @endforeach
@@ -84,8 +85,20 @@
                 .then(data => {
                     console.log(data);
                     document.querySelector('#temp').innerHTML = Math.round(data.main.temp) + '°C';
+                    document.querySelector('#feels').innerHTML = 'Feels like' + Math.round(data.main.feels_like) + '°C';
                     document.querySelector('#condition').innerHTML = data.weather[0].main;
                     document.querySelector('#icon').src = 'http://openweathermap.org/img/wn/' + data.weather[0].icon + '@2x.png';
+                })
+
+                fetch('/daily?lat='+e.suggestion.latlng.lat+'&lng='+e.suggestion.latlng.lng)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    document.querySelector('#temphigh').innerHTML = Math.round(data.main.temp_max) + '°C';
+                    document.querySelector('#templow').innerHTML = Math.round(data.main.temp_min) + '°C';
+                    document.querySelector('#icon2').src = 'http://openweathermap.org/img/wn/' + data.weather[0].icon + '.png';
+                    document.querySelector('#desc').innerHTML = data.weather[0].description;
+                    document.querySelector('#day').innerHTML = new Date(data.dt * 1000).toLocaleString("en-US", {weekday: "short"}) + ', ' + new Date(data.dt * 1000).toLocaleString("en-US", {hour: "numeric"});
                 })
             });
 
