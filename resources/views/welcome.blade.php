@@ -80,7 +80,7 @@
                 document.querySelector('#form-city').innerHTML = e.suggestion.name + ', ' + e.suggestion.country || '';
                 // document.querySelector('#form-zip').value = e.suggestion.postcode || '';
                 
-                fetch('/info?lat='+e.suggestion.latlng.lat+'&lng='+e.suggestion.latlng.lng)
+                fetch('/api/info?lat='+e.suggestion.latlng.lat+'&lng='+e.suggestion.latlng.lng)
                 .then(response => response.json())
                 .then(data => {
                     console.log(data);
@@ -90,7 +90,7 @@
                     document.querySelector('#icon').src = 'http://openweathermap.org/img/wn/' + data.weather[0].icon + '@2x.png';
                 })
 
-                fetch('/daily?lat='+e.suggestion.latlng.lat+'&lng='+e.suggestion.latlng.lng)
+                fetch('/api/daily?lat='+e.suggestion.latlng.lat+'&lng='+e.suggestion.latlng.lng)
                 .then(response => response.json())
                 .then(data => {
                     console.log(data);
